@@ -20,6 +20,9 @@ import Farmer from './components/Farmer';
 import FarmerOrderList from './components/FarmerOrderList';
 import Stock from './components/Stock';
 import AddItem from './components/AddItem';
+import FarmerListOrder from './components/FarmerListOrder';
+import FarmerListStock from './components/FarmerListStock';
+import FarmerListAddItem from './components/FarmerListAddItem';
 
 
 export default class App extends React.Component {
@@ -100,10 +103,19 @@ const AppNavigator = createStackNavigator({
     screen: Stock,
     navigationOptions: {
       headerShown: false,
-    }
+    },
   },
   AddItem: {
     screen: AddItem,
+  },
+  FarmerListOrder: {
+    screen: FarmerListOrder,
+  },
+  FarmerListStock: {
+    screen: FarmerListStock,
+  },
+  FarmerListAddItem: {
+    screen: FarmerListAddItem,
   },
 });
 

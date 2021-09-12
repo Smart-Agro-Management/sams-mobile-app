@@ -119,14 +119,14 @@ export default class AgentDashboard extends Component {
             />
             <Text style={styles.profileTextStyle}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button3} onPress={() => this.props.navigation.navigate('Farmer')}>
+          <TouchableOpacity style={styles.button3} onPress={() => this.props.navigation.navigate('Farmer', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/farmer.png')}
               style={styles.profileStyle}
             />
             <Text style={styles.profileTextStyle}>Add Farmer</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button2} onPress={() => this.props.navigation.navigate('FarmerOrderList')}>
+          <TouchableOpacity style={styles.button2} onPress={() => this.props.navigation.navigate('FarmerListOrder', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/icons8-list-60.png')}
               style={styles.profileStyle}
@@ -135,14 +135,14 @@ export default class AgentDashboard extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.button4Row}>
-          <TouchableOpacity style={styles.button4} onPress={() => this.props.navigation.navigate('Stock')}>
+          <TouchableOpacity style={styles.button4} onPress={() => this.props.navigation.navigate('FarmerListStock', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/packages.png')}
               style={styles.profileStyle}
             />
             <Text style={styles.profileTextStyle}>Stock</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button5} onPress={() => this.props.navigation.navigate('AddItem')}>
+          <TouchableOpacity style={styles.button5} onPress={() => this.props.navigation.navigate('FarmerListAddItem', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/item.png')}
               style={styles.profileStyle}

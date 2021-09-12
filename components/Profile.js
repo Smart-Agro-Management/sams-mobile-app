@@ -45,6 +45,11 @@ export default class Profile extends Component {
         const {navigation} = this.props;
         const UserName = navigation.getParam('username', 'No User');
         const UserCategory = navigation.getParam('category', 'No Category');
+
+        this.setState({
+          Username: UserName,
+          Category: UserCategory,
+        });
         
         fetch('http://192.168.1.5:8080/SP02/ProfileData.php', {
           method: 'POST',
@@ -81,6 +86,7 @@ export default class Profile extends Component {
     if (pattern.match(value) != null) {
       this.setState({ButtonActivity: true});
       this.setState({
+        Name: value,
         ErrorMessage: 'Name cannot contain any character or number.',
       });
     } else {
@@ -104,6 +110,7 @@ export default class Profile extends Component {
     ) {
       this.setState({ErrorMessage: 'Give a valid phone number.'});
       this.setState({ButtonActivity: true});
+      this.setState({Phone: value});
     } else {
       this.setState({ErrorMessage: ''});
       this.setState({Phone: value});
@@ -176,18 +183,19 @@ export default class Profile extends Component {
         },
         body: JSON.stringify({
           username: UserName,
-          // password: Password,
-          // name: Name,
-          // city: City,
-          // phone: Phone,
-          // nid: NID,
+          password: Password,
+          name: Name,
+          city: City,
+          phone: Phone,
+          nid: NID,
           category: UserCategory,
-          // dob: DateOfBirth,
+          dob: DateOfBirth,
         }),
       })
         .then(ResponseJson => ResponseJson.json())
         .then(ResponseJson => {
           alert(ResponseJson);
+          this.props.navigation.navigate('Profile', {username: UserName, category: UserCategory});
         })
         .catch(Error => {
           alert(Error);
@@ -263,14 +271,16 @@ export default class Profile extends Component {
           style={styles.textInput}
           onBlur={this.showErrorMessage}
           onChangeText={text => this.nameValidation(text)}
-        >{this.state.Name}</TextInput>
+          value={this.state.Name}
+        ></TextInput>
         <TextInput
           placeholder='City'
           placeholderTextColor="rgba(126,211,33,1)"
           style={styles.textInput}
           onChangeText={City => this.setState({City})}
           onBlur={this.showErrorMessage}
-        >{this.state.City}</TextInput>
+          value={this.state.City}
+        ></TextInput>
         <TextInput
           placeholder='Phone'
           placeholderTextColor="rgba(126,211,33,1)"
@@ -278,7 +288,8 @@ export default class Profile extends Component {
           style={styles.textInput}
           onChangeText={text => this.phoneValidation(text)}
           onBlur={this.showErrorMessage}
-        >{this.state.Phone}</TextInput>
+          value={this.state.Phone}
+        ></TextInput>
         <TextInput
           placeholder='NID'
           placeholderTextColor="rgba(126,211,33,1)"
@@ -286,7 +297,8 @@ export default class Profile extends Component {
           style={styles.textInput}
           onChangeText={NID => this.setState({NID})}
           onBlur={this.showErrorMessage}
-        >{this.state.NID}</TextInput>
+          value={this.state.NID}
+        ></TextInput>
         <TextInput
           secureTextEntry={true}
           placeholder='Password'
@@ -294,7 +306,8 @@ export default class Profile extends Component {
           style={styles.textInput}
           onChangeText={text => this.passwordValidation(text)}
           onBlur={this.showErrorMessage}
-        >{this.state.Password}</TextInput>
+          value={this.state.Password}
+        ></TextInput>
         <DatePicker
           mode="date"
           format="DD-MM-YYYY"
@@ -304,6 +317,7 @@ export default class Profile extends Component {
           customStyles={{
             placeholderText: {fontSize: 16, color: 'rgba(126,211,33,1)'},
           }}
+          date={this.state.DateOfBirth}
         />
         <Text
           style={{
@@ -324,7 +338,6 @@ export default class Profile extends Component {
             },
           ]}
           onPress={this.Action}
-          onBlur={this.showErrorMessage}
           disabled={this.state.ButtonActivity}>
           <Text style={styles.buttonTextStyle}>Submit</Text>
         </TouchableOpacity>

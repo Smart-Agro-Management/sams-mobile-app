@@ -15,7 +15,7 @@ import {
   Button,
 } from 'react-native';
 
-export default class Farmer extends Component {
+export default class FarmerListOrder extends Component {
     constructor(props){
         super(props);
 
@@ -29,7 +29,22 @@ export default class Farmer extends Component {
     }
 
     componentDidMount(){
-        fetch('http://192.168.1.5:8080/SP02/FetchProducts.php')
+
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+
+        fetch('http://192.168.1.5:8080/SP02/FarmerList.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+            }),
+        })
         .then(response=>response.json())
         .then(responseJson=>{
             this.setState({
@@ -67,11 +82,6 @@ export default class Farmer extends Component {
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.addButtonStyle}>
-            <TouchableOpacity>
-                <Text style={styles.addButtonTextStyle}> Add Farmer</Text>
-            </TouchableOpacity>
-            </View>
             <View>
             {this.state.dataset.map((val, index)=>(
                 <View key= {index}>
@@ -84,7 +94,7 @@ export default class Farmer extends Component {
     elevation: 5,
     shadowOpacity: 0.5,
     shadowRadius: 20,}}>
-                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('Profile', {username: val.Username, category: val.Category})}>
+                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('FarmerOrderList', {username: val.Username})}>
                     <View style={{height: 120, width: 120, justifyContent: 'center', borderColor: 'rgba(155,155,155,1)', borderWidth: 1, borderRadius: 10, margin: 10}}>
                         <Image source={require("../pictures/man.png")} style={{height: 100, width: 100, alignSelf: 'center'}}></Image>
                     </View>

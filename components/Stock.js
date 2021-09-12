@@ -17,12 +17,24 @@ export default class Stock extends Component{
         super(props);
     }
 
+    Navigation = () =>{
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+        if(UserCategory == 'Agent'){
+            this.props.navigation.navigate('AgentDashboard')
+        }else{
+            this.props.navigation.navigate('FarmerDashboard')
+        }
+    }
+
     render(){
         return(
             <ScrollView style={styles.viewStyle}>
                 <View>
                     <View style={styles.headerStyle}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('AgentDashboard')}>
+                        <TouchableOpacity onPress={this.Navigation}>
                             <Image style={styles.headerImageStyle1} source={require('../pictures/previous.png')}></Image>
                         </TouchableOpacity>
                         <View style={styles.headerViewStyle}>

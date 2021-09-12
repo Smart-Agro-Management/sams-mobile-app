@@ -111,19 +111,19 @@ export default class PlaceOrder extends Component {
     elevation: 5,
     shadowOpacity: 0.5,
     shadowRadius: 20,}}>
-                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('PlaceOrderItem', {username: val.Username})}>
+                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('PlaceOrderItem', {username: val.Username, name: val.Name, city: val.City, phone: val.Phone})}>
                     <View style={{height: 120, width: 120, justifyContent: 'center', borderColor: 'rgba(155,155,155,1)', borderWidth: 1, borderRadius: 10, margin: 10}}>
                         <Image source={require("../pictures/man.png")} style={{height: 100, width: 100, alignSelf: 'center'}}></Image>
                     </View>
                     <View>
-                    <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 20, width: 200}}>{val.Username}</Text>
+                    <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 20, width: 200}}>{val.Name}</Text>
                     <View style={{marginTop: 5, flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/location.png')} style={{height: 15, width: 15}}></Image></View>
-                        <Text style={{width: 200, marginLeft: 5}}>Thanapara, Kushtia</Text>
+                        <Text style={{width: 200, marginLeft: 5}}>{val.City}</Text>
                     </View>
                     <View style={{marginTop: 5, flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/phone.png')} style={{height: 15, width: 15}}></Image></View>
-                        <Text style={{width: 200, marginLeft: 5}}>0171111111111</Text>
+                        <Text style={{width: 200, marginLeft: 5}}>0{val.Phone}</Text>
                     </View>
                     </View>
                 </TouchableOpacity>

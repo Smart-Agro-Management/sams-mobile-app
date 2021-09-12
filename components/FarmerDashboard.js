@@ -4,7 +4,17 @@ import Swiper from 'react-native-swiper';
 import {Row, Table} from 'react-native-table-component';
 
 export default class FarmerDashboard extends Component {
+
+  constructor(props){
+    super(props);
+  }
+
   render() {
+
+    const {navigation} = this.props;
+    const UserName = navigation.getParam('usernameInput', 'No user');
+    const UserCategory = navigation.getParam('category', 'No Category');
+
     return (
       <View>
         <View
@@ -44,21 +54,21 @@ export default class FarmerDashboard extends Component {
         </Swiper>
         </View>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/farmer.png')}
               style={styles.profileStyle}
             />
             <Text style={styles.profileTextStyle}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button3}>
+          <TouchableOpacity style={styles.button3} onPress={() => this.props.navigation.navigate('FarmerOrderList', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/icons8-list-60.png')}
               style={styles.profileStyle}
             />
             <Text style={styles.profileTextStyle}>Order List</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button2}>
+          <TouchableOpacity style={styles.button2} onPress={() => this.props.navigation.navigate('Stock', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/packages.png')}
               style={styles.profileStyle}

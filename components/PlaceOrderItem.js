@@ -47,6 +47,10 @@ export default class PlaceOrderItem extends Component{
     render(){
         const {navigation} = this.props;
         const userName = navigation.getParam('username', 'No User');
+        const name = navigation.getParam('name', 'No name');
+        const city = navigation.getParam('city', 'No city');
+        const phone = navigation.getParam('phone', 'No phone');
+
         return(
             <ScrollView>
                     <ImageBackground
@@ -71,14 +75,14 @@ export default class PlaceOrderItem extends Component{
                         </TouchableOpacity>
                     </View>
                     <View style={{alignItems: 'center',  marginLeft: 60}}>
-                    <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{userName}</Text>
+                    <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{name}</Text>
                     <View style={{marginTop: 5, flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/location.png')} style={{height: 15, width: 15}}></Image></View>
-                        <Text style={{marginLeft: 5, fontWeight: 'bold'}}>Thanapara, Kushtia</Text>
+                        <Text style={{marginLeft: 5, fontWeight: 'bold'}}>{city}</Text>
                     </View>
                     <View style={{marginTop: 5, flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/phone.png')} style={{height: 15, width: 15}}></Image></View>
-                        <Text style={{marginLeft: 5, fontWeight: 'bold'}}>0171111111111</Text>
+                        <Text style={{marginLeft: 5, fontWeight: 'bold'}}>{phone}</Text>
                     </View>
                     </View>
                     </View>

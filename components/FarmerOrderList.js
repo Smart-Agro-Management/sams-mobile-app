@@ -17,15 +17,20 @@ export default class OrderList extends Component{
 
         this.state = {
             isModalVisible: false,
+            dataset: [],
         }
     }
 
     render(){
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username');
+
+
         return(
             <ScrollView style={styles.container}>
                 <View style={styles.container}>
                     <View style={styles.bodyStyle}>
-                        <Text style={styles.userInfoText1}>Mridul</Text>
+                        <Text style={styles.userInfoText1}>{UserName}</Text>
                         <Text style={styles.userInfoText2}>Thanapara, Kushtia</Text>
                         <View style={styles.straightline}></View>
                         <View style={styles.orderListStyle}>
