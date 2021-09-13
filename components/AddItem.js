@@ -9,7 +9,9 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class AddItem extends Component{
     constructor(props){
@@ -17,12 +19,62 @@ export default class AddItem extends Component{
 
         this.state = {
             isModalVisible: false,
+            Name: '',
+            Price: '',
+            Description: '',
+            Photo: '',
         }
     }
 
+
+    Action = () => {
+    const {Name} = this.state;
+    const {Price} = this.state;
+    const {Description} = this.state;
+
+    const {navigation} = this.props;
+    const UserName = navigation.getParam('username', 'No User');
+
+    var APIurl = 'http://192.168.1.5:8080/SP02/AddItem.php';
+
+    if (
+      this.state.Name == '' ||
+      this.state.Price == ''
+    ) {
+      alert("Field cannot be empty!");
+    } else {
+      fetch(APIurl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: UserName,
+          name: Name,
+          price: Price,
+          description: Description,
+        }),
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          alert(responseJson);
+          this.setState({
+              Name: '',
+              Price: '',
+              Description: '',
+          });
+        })
+        .catch(Error => {
+          alert(Error);
+        });
+    }
+  };
+
     render(){
         return(
-            <View>
+            <KeyboardAvoidingView style={styles.KeyboardAvoidingViewStyle}>
+            <ScrollView style={styles.ScrollViewStyle}>
                 <View>
                     <View style={styles.bodyStyle}>
                         <View>
@@ -35,13 +87,13 @@ export default class AddItem extends Component{
                             <View>
                                 <Text>Item Name:</Text>
                                 <View style={styles.textInputViewStyle1}>
-                                    <TextInput style={styles.textInputStyle1}></TextInput>
+                                    <TextInput style={styles.textInputStyle1} onChangeText={(Name) => this.setState({Name})} value={this.state.Name}></TextInput>
                                 </View>
                             </View>
                             <View>
                                 <Text style={styles.textInputHeaderStyle1}>Price / kg:</Text>
                                 <View style={styles.textInputViewStyle2}>
-                                    <TextInput style={styles.textInputStyle2}></TextInput>
+                                    <TextInput style={styles.textInputStyle2} onChangeText={(Price) => this.setState({Price})} value={this.state.Price}></TextInput>
                                 </View>
                             </View>
                         </View>
@@ -49,12 +101,12 @@ export default class AddItem extends Component{
                             <View>
                                 <Text>Description:</Text>
                                 <View style={styles.textInputViewStyle3}>
-                                    <TextInput numberOfLines={4} style={styles.textInputStyle3}></TextInput>
+                                    <TextInput multiline={true} numberOfLines={4} style={styles.textInputStyle3} onChangeText={(Description) => this.setState({Description})} value={this.state.Description}></TextInput>
                                 </View>
                             </View>
                         </View>
                         <TouchableOpacity style={styles.buttonStyle1}>
-                            <Text style={styles.buttonTextStyle}>Save</Text>
+                            <Text style={styles.buttonTextStyle} onPress={this.Action}>Save</Text>
                         </TouchableOpacity>
                     </View>
                     <Modal style={styles.modalStyle} animationType={'fade'} transparent={true} visible={this.state.isModalVisible} onRequestClose={() => this.setState({isModalVisible: false})}>
@@ -78,13 +130,23 @@ export default class AddItem extends Component{
                         </View>
                     </Modal>
                 </View>
-            </View>
+            </ScrollView>
+            </KeyboardAvoidingView>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    KeyboardAvoidingViewStyle:{
+        flex: 1,
+    },
+
+    ScrollViewStyle:{
+        flex: 1,
+    },
+
     bodyStyle:{
+        flex: 1,
         width: '70%',
         backgroundColor: '#fff',
         alignSelf: 'center',

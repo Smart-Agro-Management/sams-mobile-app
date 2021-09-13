@@ -24,7 +24,68 @@ export default class FarmerListOrder extends Component {
             dataset: [],
             Username: '',
             Category: '',
+            SearchName: '',
             isModalVisible: false,
+        }
+    }
+
+    Search = () =>{
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+        const {SearchName} = this.state;
+
+        if(this.state.SearchName != ''){
+        fetch('http://192.168.1.5:8080/SP02/SearchFarmer.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+                searchName: SearchName,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                isloading: false,
+                dataset: responseJson,
+                SearchName: '',
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+        }else{
+        
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+
+        fetch('http://192.168.1.5:8080/SP02/FarmerList.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                isloading: false,
+                dataset: responseJson,
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        })
         }
     }
 
@@ -75,9 +136,9 @@ export default class FarmerListOrder extends Component {
             }}>
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flexDirection: 'row'}}>
-                        <TextInput placeholder="Type farmer's name" style={{backgroundColor: 'rgba(240,240,240,1)', margin: 5, borderRadius: 10, width: 260}}></TextInput>
+                        <TextInput placeholder="Type farmer's name" style={{backgroundColor: 'rgba(240,240,240,1)', margin: 5, borderRadius: 10, width: 260}} onChangeText={(SearchName)=> this.setState({SearchName})} value={this.state.SearchName}></TextInput>
                     </View>
-                    <TouchableOpacity style={{height: 36, width: 65, backgroundColor: "rgba(126,211,33,1)", justifyContent: 'center', alignSelf: 'center', borderRadius: 10}}>
+                    <TouchableOpacity style={{height: 36, width: 65, backgroundColor: "rgba(126,211,33,1)", justifyContent: 'center', alignSelf: 'center', borderRadius: 10}} onPress={this.Search}>
                         <Text style={{textAlign: 'center', fontWeight: 'bold', color: '#fff'}}>Serach</Text>
                     </TouchableOpacity>
                 </View>
