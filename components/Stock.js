@@ -9,12 +9,18 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default class Stock extends Component{
     constructor(props){
         super(props);
+
+        this.state = {
+            dataset: [],
+            quantity: 0,
+        }
     }
 
     Navigation = () =>{
@@ -29,8 +35,111 @@ export default class Stock extends Component{
         }
     }
 
+
+    Deletion = (ID) =>{
+
+        fetch('http://192.168.1.5:8080/SP02/DeleteProduct.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: ID,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            alert(responseJson);
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+    }
+
+    Summation = (value, ID) =>{
+        var sumValue = parseInt(value)+parseInt(this.state.quantity);
+
+        fetch('http://192.168.1.5:8080/SP02/UpdateProductQuantity.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: ID,
+                quantity: sumValue,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            alert(responseJson);
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+    }
+
+
+    Subtraction = (value, ID) =>{
+        var sumValue = parseInt(value)-parseInt(this.state.quantity);
+
+        if(parseInt(value) >= 20){
+        fetch('http://192.168.1.5:8080/SP02/UpdateProductQuantity.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: ID,
+                quantity: sumValue,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            alert(responseJson);
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+        }else{
+            alert("Stock for any product cannot be less than 20Kg!");
+        }
+    }
+
+    componentDidMount(){
+
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+
+        fetch('http://192.168.1.5:8080/SP02/ProductList.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                isloading: false,
+                dataset: responseJson,
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+    }
+
     render(){
         return(
+            <KeyboardAvoidingView style={styles.viewStyle}>
             <ScrollView style={styles.viewStyle}>
                 <View>
                     <View style={styles.headerStyle}>
@@ -47,41 +156,48 @@ export default class Stock extends Component{
                     <View style={styles.straightline}></View>
                     <View>
                         <Text style={styles.productListTextStyle1}>Product List</Text>
-                        <View style={styles.productListViewStyle1}>
+                        <View>{this.state.dataset.map((val, index)=>(
+                        <View style={styles.productListViewStyle1} key={index}>
                             <View>
-                                <Text>Item Name - Price</Text>
+                                <Text>{val.Name} - {val.Price}৳ / kg</Text>
                             </View>
                             <View style={styles.productListViewStyle2}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={()=>this.props.navigation.navigate('UpdateItem', {id: val.ID})}>
                                     <Text style={styles.productListTextStyle2}>Edit</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={(id)=>this.Deletion(val.ID)}>
                                     <Text style={styles.productListTextStyle3}>Delete</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        ))}
+                        </View>
                     </View>
                     <View>
                         <Text style={styles.productListTextStyle1}>In Stock</Text>
-                        <View style={styles.productListViewStyle1}>
+                        <View>{this.state.dataset.map((val, index)=>(
+                        <View style={styles.productListViewStyle1} key={index}>
                             <View>
-                                <Text>Item Name - Quantity</Text>
+                                <Text>{val.Name} - {val.Quantity}kg</Text>
                             </View>
                             <View style={styles.productListViewStyle2}>
                                 <View style={styles.textInputViewStyle}>
-                                    <TextInput style={styles.textInputStyle}></TextInput>
+                                    <TextInput style={styles.textInputStyle} onChangeText={(quantity)=>this.setState({quantity})}></TextInput>
                                 </View>
-                                <TouchableOpacity style={styles.touchableOpacityTextInputStyle1}>
+                                <TouchableOpacity style={styles.touchableOpacityTextInputStyle1} onPress={(value, id)=>{this.Summation(val.Quantity, val.ID)}}>
                                     <Text style={styles.productListTextStyle4}>+</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.touchableOpacityTextInputStyle2}>
+                                <TouchableOpacity style={styles.touchableOpacityTextInputStyle2} onPress={(value, id)=>{this.Subtraction(val.Quantity, val.ID)}}>
                                     <Text style={styles.productListTextStyle4}>-</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        ))}
+                        </View>
                     </View>
                 </View>
             </ScrollView>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -132,6 +248,7 @@ const styles = StyleSheet.create({
 
     viewStyle:{
         backgroundColor: '#fff',
+        flex: 1,
     },
 
     straightline:{

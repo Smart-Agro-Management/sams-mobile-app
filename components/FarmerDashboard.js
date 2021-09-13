@@ -77,7 +77,7 @@ export default class FarmerDashboard extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.button4Row}>
-          <TouchableOpacity style={styles.button4}>
+          <TouchableOpacity style={styles.button4} onPress={() => this.props.navigation.navigate('AddItem', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/item.png')}
               style={styles.profileStyle}
