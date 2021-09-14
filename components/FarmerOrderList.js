@@ -18,20 +18,80 @@ export default class OrderList extends Component{
         this.state = {
             isModalVisible: false,
             dataset: [],
+            Name: '',
+            City: '',
         }
     }
 
-    render(){
+    CustomerData(){
+        
         const {navigation} = this.props;
-        const UserName = navigation.getParam('username');
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+        
+        fetch('http://192.168.1.5:8080/SP02/ProfileData.php', {
+          method: 'POST',
+          headers: {
+            'Accpet': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: UserName,
+            category: UserCategory,
+          }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                Name: responseJson[0].Name,
+                City: responseJson[0].City,
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+    }
 
 
+    OrderListData(){
+        const {navigation} = this.props;
+        const UserName = navigation.getParam('username', 'No User');
+        const UserCategory = navigation.getParam('category', 'No Category');
+
+
+        fetch('http://192.168.1.5:8080/SP02/OrderList.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                dataset: responseJson,
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+    }
+
+    componentDidMount(){
+        this.OrderListData();
+        this.CustomerData();
+    }
+
+    render(){
         return(
             <ScrollView style={styles.container}>
                 <View style={styles.container}>
                     <View style={styles.bodyStyle}>
-                        <Text style={styles.userInfoText1}>{UserName}</Text>
-                        <Text style={styles.userInfoText2}>Thanapara, Kushtia</Text>
+                        <Text style={styles.userInfoText1}>{this.state.Name}</Text>
+                        <Text style={styles.userInfoText2}>{this.state.City}</Text>
                         <View style={styles.straightline}></View>
                         <View style={styles.orderListStyle}>
                             <View>

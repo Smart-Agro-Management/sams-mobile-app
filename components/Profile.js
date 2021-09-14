@@ -45,11 +45,6 @@ export default class Profile extends Component {
         const {navigation} = this.props;
         const UserName = navigation.getParam('username', 'No User');
         const UserCategory = navigation.getParam('category', 'No Category');
-
-        this.setState({
-          Username: UserName,
-          Category: UserCategory,
-        });
         
         fetch('http://192.168.1.5:8080/SP02/ProfileData.php', {
           method: 'POST',

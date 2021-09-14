@@ -155,7 +155,7 @@ export default class FarmerListOrder extends Component {
     elevation: 5,
     shadowOpacity: 0.5,
     shadowRadius: 20,}}>
-                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('FarmerOrderList', {username: val.Username})}>
+                <TouchableOpacity style={{flexDirection: 'row'}} onPress={() => this.props.navigation.navigate('FarmerOrderList', {username: val.Username, category: val.Category})}>
                     <View style={{height: 120, width: 120, justifyContent: 'center', borderColor: 'rgba(155,155,155,1)', borderWidth: 1, borderRadius: 10, margin: 10}}>
                         <Image source={require("../pictures/man.png")} style={{height: 100, width: 100, alignSelf: 'center'}}></Image>
                     </View>

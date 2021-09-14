@@ -80,14 +80,14 @@ export default class Dashboard extends Component {
             />
             <Text style={styles.profileTextStyle}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button2} onPress={()=>this.props.navigation.navigate('PlaceOrder')}>
+          <TouchableOpacity style={styles.button2} onPress={()=>this.props.navigation.navigate('PlaceOrder', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/shopping-bag.png')}
               style={styles.profileStyle}
             />
             <Text style={styles.profileTextStyle}>Place Order</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button3} onPress={() => this.props.navigation.navigate('OrderList')}>
+          <TouchableOpacity style={styles.button3} onPress={() => this.props.navigation.navigate('OrderList', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/icons8-list-60.png')}
               style={styles.profileStyle}
@@ -96,7 +96,7 @@ export default class Dashboard extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.button4Row}>
-          <TouchableOpacity style={styles.button4} onPress={() => this.props.navigation.navigate('Cart')}>
+          <TouchableOpacity style={styles.button4} onPress={() => this.props.navigation.navigate('Cart', {username: UserName, category: UserCategory})}>
             <Image
               source={require('../pictures/cart.png')}
               style={styles.profileStyle}
