@@ -121,6 +121,16 @@ export default class Cart extends Component{
     }
 
 
+    getRandomString() {
+        var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var result = '';
+        for ( var i = 0; i < 10; i++ ) {
+            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+        }
+        return result;
+    }
+
+
     componentDidMount(){
         this.CustomerData();
         this.OrderList();
@@ -135,6 +145,8 @@ export default class Cart extends Component{
         const {price} = this.state;
         const {City} = this.state;
 
+        var ID = this.getRandomString();
+
         if(price == ''){
             alert("There is nothing in cart to order!");
         }else{
@@ -148,6 +160,7 @@ export default class Cart extends Component{
                     username: UserName,
                     price: price,
                     city: City,
+                    id: ID,
                 }),
             })
             .then(response=>response.json())

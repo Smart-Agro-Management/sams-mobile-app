@@ -55,15 +55,35 @@ export default class HomeScreen extends Component {
     .then(response => {
       if(response[0].Category == 'Farmer'){
         this.props.navigation.navigate('FarmerDashboard', {usernameInput: response[0].Username, category: response[0].Category});
+        this.setState({
+          usernameInput: '',
+          passwordInput: '',
+          errorMessage: '',
+        });
       }
       else if(response[0].Category == 'Customer'){
         this.props.navigation.navigate('Dashboard', {usernameInput: response[0].Username, category: response[0].Category});
+        this.setState({
+          usernameInput: '',
+          passwordInput: '',
+          errorMessage: '',
+        });
       }
       else if(response[0].Category == 'Agent'){
         this.props.navigation.navigate('AgentDashboard', {usernameInput: response[0].Username, category: response[0].Category});
+        this.setState({
+          usernameInput: '',
+          passwordInput: '',
+          errorMessage: '',
+        });
       }
       else{
         alert(response);
+        this.setState({
+          usernameInput: '',
+          passwordInput: '',
+          errorMessage: '',
+        });
       }
     })
     .catch(Error => {
@@ -105,6 +125,7 @@ export default class HomeScreen extends Component {
           style={styles.textInput}
           onBlur={this.ShowErrorMessage}
           onChangeText={usernameInput => this.setState({usernameInput})}
+          value={this.state.usernameInput}
         />
         <TextInput
           secureTextEntry={true}
@@ -113,6 +134,7 @@ export default class HomeScreen extends Component {
           style={styles.textInput}
           onBlur={this.ShowErrorMessage}
           onChangeText={passwordInput => this.setState({passwordInput})}
+          value={this.state.passwordInput}
         />
         <Text style={styles.errorMessageStyle}>{this.state.errorMessage}</Text>
         <TouchableOpacity

@@ -11,12 +11,11 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default class OrderList extends Component{
+export default class FarmerOrderList extends Component{
     constructor(props){
         super(props);
 
         this.state = {
-            isModalVisible: false,
             dataset: [],
             Name: '',
             City: '',
@@ -59,7 +58,7 @@ export default class OrderList extends Component{
         const UserCategory = navigation.getParam('category', 'No Category');
 
 
-        fetch('http://192.168.1.5:8080/SP02/OrderList.php', {
+        fetch('http://192.168.1.5:8080/SP02/FarmerOrderList.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -85,6 +84,34 @@ export default class OrderList extends Component{
         this.CustomerData();
     }
 
+    PressDelivered = (cartId, stockId, val, stockQuantity) =>{
+        var quantity = (parseInt(stockQuantity) - parseInt(val));
+
+        if(parseInt(quantity)>=20){
+        fetch('http://192.168.1.5:8080/SP02/ProductDeliver.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cartId: cartId,
+                stockId: stockId,
+                quantity: quantity,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            alert(responseJson);
+        })
+        .catch((error)=>{
+            alert(error);
+        })
+        }else{
+            alert("Please add some stocks then perform again!");
+        }
+    }
+
     render(){
         return(
             <ScrollView style={styles.container}>
@@ -92,46 +119,23 @@ export default class OrderList extends Component{
                     <View style={styles.bodyStyle}>
                         <Text style={styles.userInfoText1}>{this.state.Name}</Text>
                         <Text style={styles.userInfoText2}>{this.state.City}</Text>
-                        <View style={styles.straightline}></View>
-                        <View style={styles.orderListStyle}>
+                        <View style={styles.straightline}>
+                        {this.state.dataset.map((val, index)=>(
+                        <View style={styles.orderListStyle} key={index}>
                             <View>
-                                <Text style={styles.orderTextStyle1}>Thanapara, Kushtia</Text>
-                                <Text style={styles.orderTextStyle2}>Referenc no. </Text>
-                                <Text style={styles.orderTextStyle2}>Purchase Cost: </Text>
+                                <Text style={styles.orderTextStyle1}>{val.City}</Text>
+                                <Text style={styles.orderTextStyle2}>Referenc no. {val.ID}</Text>
+                                <Text style={styles.orderTextStyle2}>{val.Name} {val.Quantity}kg</Text>
+                                <Text style={styles.orderTextStyle2}>Purchase Cost: {val.Price}৳</Text>
                             </View>
                             <View style={styles.orderListInnerStyle}>
-                                <Text style={styles.orderTextStyle3}>21.10.2021</Text>
-                                <TouchableOpacity onPress={() => this.setState({isModalVisible: true})}>
-                                    <Text style={styles.orderTextStyle4}>Received</Text>
+                                <Text style={styles.orderTextStyle3}>{val.Date}</Text>
+                                <TouchableOpacity onPress={()=>this.PressDelivered(val.CartId, val.StockId, val.Quantity, val.StockQuantity)}>
+                                    <Text style={styles.orderTextStyle4}>Delivered</Text>
                                 </TouchableOpacity>
-                                <Modal style={styles.modalStyle} animationType={'fade'} transparent={true} visible={this.state.isModalVisible} onRequestClose={() => this.setState({isModalVisible: false})}>
-                                    <View style={styles.modalViewStyle1}>
-                                        <TouchableWithoutFeedback style={styles.modalViewStyle2} onPress={() => this.setState({isModalVisible: false})}>
-                                            <View style={styles.modalViewStyle3}>
-                                            <View style={styles.modalViewStyle4}>
-                                                <View style={styles.closeImageViewStyle}>
-                                                    <TouchableOpacity onPress={() => this.setState({isModalVisible: false})}>
-                                                        <Image source={require('../pictures/cancel.png')} style={styles.closeImageStyle}></Image>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <TouchableOpacity style={styles.buttonStyle}>
-                                                    <Text style={styles.buttonTextStyle}>Requested</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={styles.buttonStyle}>
-                                                    <Text style={styles.buttonTextStyle}>Accepted</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={styles.buttonStyle}>
-                                                    <Text style={styles.buttonTextStyle}>Canceled</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity style={styles.buttonStyle}>
-                                                    <Text style={styles.buttonTextStyle}>Delivered</Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                </Modal>
                             </View>
+                        </View>
+                        ))}
                         </View>
                     </View>
                 </View>

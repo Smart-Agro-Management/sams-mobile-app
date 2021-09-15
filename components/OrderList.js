@@ -97,7 +97,7 @@ export default class OrderList extends Component{
                             <View>
                                 <Text style={styles.orderTextStyle1}>{val.City}</Text>
                                 <Text style={styles.orderTextStyle2}>Referenc no. {val.ID}</Text>
-                                <Text style={styles.orderTextStyle2}>Purchase Cost: {val.Price}</Text>
+                                <Text style={styles.orderTextStyle2}>Purchase Cost: {val.Price}৳</Text>
                             </View>
                             <View style={styles.orderListInnerStyle}>
                                 <Text style={styles.orderTextStyle3}>{val.Date}</Text>
