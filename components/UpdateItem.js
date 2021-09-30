@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import SelectDropdown from 'react-native-select-dropdown';
 
 export default class UpdateItem extends Component{
     constructor(props){
@@ -23,6 +24,7 @@ export default class UpdateItem extends Component{
             Price: '',
             Description: '',
             Photo: '',
+            Unit: '',
         }
     }
 
@@ -49,6 +51,7 @@ export default class UpdateItem extends Component{
               Name: responseJson[0].Name,
               Price: responseJson[0].Price,
               Description: responseJson[0].Description,
+              Unit: responseJson[0].Unit,
           });
         })
         .catch(Error => {
@@ -57,10 +60,14 @@ export default class UpdateItem extends Component{
   };
 
 
+    Unit = ['kg', 'liter', 'dozen'];
+
+
     Action = () => {
     const {Name} = this.state;
     const {Price} = this.state;
     const {Description} = this.state;
+    const {Unit} = this.state;
 
     const {navigation} = this.props;
     const id = navigation.getParam('id', 'No ID');
@@ -84,6 +91,7 @@ export default class UpdateItem extends Component{
           name: Name,
           price: Price,
           description: Description,
+          unit: Unit,
         }),
       })
         .then(response => response.json())
@@ -129,6 +137,10 @@ export default class UpdateItem extends Component{
                                     <TextInput multiline={true} numberOfLines={4} style={styles.textInputStyle3} onChangeText={(Description) => this.setState({Description})} value={this.state.Description}></TextInput>
                                 </View>
                             </View>
+                        </View>
+                        <View>
+                            <Text>Unit: </Text>
+                            <SelectDropdown data={this.Unit} defaultButtonText={this.state.Unit} onSelect={(slectedItem, index)=>{this.setState({Unit: slectedItem})}} buttonTextAfterSelection={(slectedItem)=>{return slectedItem}} buttonStyle={styles.SelectDropdownButtonStyle} buttonTextStyle={styles.SelectDropdownButtonTextStyle}></SelectDropdown>
                         </View>
                         <TouchableOpacity style={styles.buttonStyle1}>
                             <Text style={styles.buttonTextStyle} onPress={this.Action}>Save</Text>
@@ -313,5 +325,12 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         borderWidth: 1,
         borderRadius: 5,
+    },
+
+    SelectDropdownButtonStyle:{
+        borderWidth: 0.8,
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 35,
     },
 });

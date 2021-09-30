@@ -45,6 +45,7 @@ export default class PlaceOrder extends Component {
             },
             body: JSON.stringify({
                 searchName: SearchName,
+                username: UserName,
             }),
         })
         .then(response=>response.json())
@@ -60,7 +61,16 @@ export default class PlaceOrder extends Component {
         })
         }else{
         
-        fetch('http://192.168.1.5:8080/SP02/FetchProducts.php')
+        fetch('http://192.168.1.5:8080/SP02/FetchProducts.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: UserName,
+            })
+        })
         .then(response=>response.json())
         .then(responseJson=>{
             this.setState({
@@ -75,7 +85,20 @@ export default class PlaceOrder extends Component {
     }
 
     componentDidMount(){
-        fetch('http://192.168.1.5:8080/SP02/FetchProducts.php')
+        const {navigation} = this.props;
+        const userName = navigation.getParam('username', 'No User');
+
+
+        fetch('http://192.168.1.5:8080/SP02/FetchProducts.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: userName,
+            })
+        })
         .then(response=>response.json())
         .then(responseJson=>{
             this.setState({

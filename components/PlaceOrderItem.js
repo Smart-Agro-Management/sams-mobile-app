@@ -29,6 +29,7 @@ export default class PlaceOrderItem extends Component{
             productQuantity: '',
             productId: '',
             quantity: 0,
+            unit: '',
         }
     }
     
@@ -150,9 +151,9 @@ export default class PlaceOrderItem extends Component{
                             <View style={{borderColor: 'rgba(155,155,155,1)', width: 340, borderWidth: 1, margin: 10, alignSelf: 'center', borderRadius: 10, flexDirection: 'row'}}>
                             <View style={{margin: 5, width: 258}}>
                                 <Text style={{fontWeight: 'bold', fontSize: 20}}>{val.Name}</Text>
-                                <Text>{val.Price}৳ / kg</Text>
+                                <Text>{val.Price}৳ / {val.Unit}</Text>
                             </View>
-                            <TouchableOpacity onPress={() => this.setState({isModalVisible: true, productName: val.Name, productPrice: val.Price, productDescription: val.Description, productQuantity: val.Quantity, productId: val.ID,})} style={{height: 30, width: 65, backgroundColor: 'rgba(126,211,33,1)', justifyContent: 'center', alignSelf: 'flex-end', marginBottom: 5, borderRadius: 10}}>
+                            <TouchableOpacity onPress={() => this.setState({isModalVisible: true, productName: val.Name, productPrice: val.Price, productDescription: val.Description, productQuantity: val.Quantity, productId: val.ID, unit: val.Unit,})} style={{height: 30, width: 65, backgroundColor: 'rgba(126,211,33,1)', justifyContent: 'center', alignSelf: 'flex-end', marginBottom: 5, borderRadius: 10}}>
                                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: '#fff'}}>Add</Text>
                             </TouchableOpacity>
                             </View>
@@ -213,7 +214,7 @@ export default class PlaceOrderItem extends Component{
                             </TouchableOpacity>
                         </ImageBackground>
             <Text style={{fontSize: 22, fontWeight: 'bold', marginTop: 10}}>{this.state.productName}</Text>
-            <Text style={{}}>{this.state.productPrice}৳ / kg</Text>
+            <Text style={{}}>{this.state.productPrice}৳ / {this.state.unit}</Text>
             <Text
             style={{
                 textAlign: 'center',

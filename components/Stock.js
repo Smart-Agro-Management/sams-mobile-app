@@ -159,7 +159,7 @@ export default class Stock extends Component{
                         <View>{this.state.dataset.map((val, index)=>(
                         <View style={styles.productListViewStyle1} key={index}>
                             <View>
-                                <Text>{val.Name} - {val.Price}৳ / kg</Text>
+                                <Text>{val.Name} - {val.Price}৳ / {val.Unit}</Text>
                             </View>
                             <View style={styles.productListViewStyle2}>
                                 <TouchableOpacity onPress={()=>this.props.navigation.navigate('UpdateItem', {id: val.ID})}>
@@ -178,7 +178,7 @@ export default class Stock extends Component{
                         <View>{this.state.dataset.map((val, index)=>(
                         <View style={styles.productListViewStyle1} key={index}>
                             <View>
-                                <Text>{val.Name} - {val.Quantity}kg</Text>
+                                <Text>{val.Name} - {val.Quantity}{val.Unit}</Text>
                             </View>
                             <View style={styles.productListViewStyle2}>
                                 <View style={styles.textInputViewStyle}>

@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import SelectDropdown from 'react-native-select-dropdown';
 
 export default class AddItem extends Component{
     constructor(props){
@@ -23,14 +24,19 @@ export default class AddItem extends Component{
             Price: '',
             Description: '',
             Photo: '',
+            Unit: 'kg',
         }
     }
+
+
+    Unit = ['kg', 'liter', 'dozen'];
 
 
     Action = () => {
     const {Name} = this.state;
     const {Price} = this.state;
     const {Description} = this.state;
+    const {Unit} = this.state;
 
     const {navigation} = this.props;
     const UserName = navigation.getParam('username', 'No User');
@@ -54,6 +60,7 @@ export default class AddItem extends Component{
           name: Name,
           price: Price,
           description: Description,
+          unit: Unit,
         }),
       })
         .then(response => response.json())
@@ -63,6 +70,7 @@ export default class AddItem extends Component{
               Name: '',
               Price: '',
               Description: '',
+              Unit: 'kg',
           });
         })
         .catch(Error => {
@@ -91,7 +99,7 @@ export default class AddItem extends Component{
                                 </View>
                             </View>
                             <View>
-                                <Text style={styles.textInputHeaderStyle1}>Price / kg:</Text>
+                                <Text style={styles.textInputHeaderStyle1}>Price / unit:</Text>
                                 <View style={styles.textInputViewStyle2}>
                                     <TextInput style={styles.textInputStyle2} onChangeText={(Price) => this.setState({Price})} value={this.state.Price}></TextInput>
                                 </View>
@@ -104,6 +112,10 @@ export default class AddItem extends Component{
                                     <TextInput multiline={true} numberOfLines={4} style={styles.textInputStyle3} onChangeText={(Description) => this.setState({Description})} value={this.state.Description}></TextInput>
                                 </View>
                             </View>
+                        </View>
+                        <View>
+                            <Text>Unit: </Text>
+                            <SelectDropdown data={this.Unit} defaultButtonText={this.Unit[0]} onSelect={(slectedItem, index)=>{this.setState({Unit: slectedItem})}} buttonTextAfterSelection={(slectedItem)=>{return slectedItem}} buttonStyle={styles.SelectDropdownButtonStyle} buttonTextStyle={styles.SelectDropdownButtonTextStyle}></SelectDropdown>
                         </View>
                         <TouchableOpacity style={styles.buttonStyle1}>
                             <Text style={styles.buttonTextStyle} onPress={this.Action}>Save</Text>
@@ -288,5 +300,12 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         borderWidth: 1,
         borderRadius: 5,
+    },
+
+    SelectDropdownButtonStyle:{
+        borderWidth: 0.8,
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 35,
     },
 });
