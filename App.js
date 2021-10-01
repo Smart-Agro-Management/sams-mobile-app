@@ -4,8 +4,6 @@ import {createStackNavigator, HeaderBackButton, HeaderHeightContext, useHeaderHe
 import {createAppContainer} from 'react-navigation';
 
 import HomeScreen from './components/HomeScreen';
-import AboutScreen from './components/AboutScreen';
-import Test, {Username, Language} from './components/Test';
 import Registration from './components/Registration';
 import Dashboard from './components/Dashboard';
 import FarmerDashboard from './components/FarmerDashboard';
@@ -75,9 +73,6 @@ const AppNavigator = createStackNavigator({
   },
   PlaceOrder: {
     screen: PlaceOrder,
-  },
-  Test: {
-    screen: Test,
   },
   
   Profile: {

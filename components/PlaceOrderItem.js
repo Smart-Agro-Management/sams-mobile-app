@@ -14,6 +14,7 @@ import {
   Button,
   ImageBackground,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 
 export default class PlaceOrderItem extends Component{
@@ -30,6 +31,8 @@ export default class PlaceOrderItem extends Component{
             productId: '',
             quantity: 0,
             unit: '',
+            rate: [1, 2, 3, 4, 5],
+            defaultRate: 0,
         }
     }
     
@@ -72,6 +75,63 @@ export default class PlaceOrderItem extends Component{
     }
 
 
+    Rating = (rate) =>{
+        this.setState({defaultRate: rate});
+
+        const {navigation} = this.props;
+        const farmerUsername = navigation.getParam('username', 'No User');
+        const customerUsername = navigation.getParam('customerUsername', 'No User');
+
+        fetch('http://192.168.1.5:8080/SP02/RatingInsertUpdate.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                customerUsername: customerUsername,
+                farmerUsername: farmerUsername,
+                rate: rate,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            ToastAndroid.show(responseJson, ToastAndroid.SHORT);
+        })
+        .catch((error)=>{
+            alert(error);
+        });
+    }
+
+
+    RatingData = () =>{
+        const {navigation} = this.props;
+        const farmerUsername = navigation.getParam('username', 'No User');
+        const customerUsername = navigation.getParam('customerUsername', 'No User');
+
+        fetch('http://192.168.1.5:8080/SP02/RatingData.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                customerUsername: customerUsername,
+                farmerUsername: farmerUsername,
+            }),
+        })
+        .then(response=>response.json())
+        .then(responseJson=>{
+            this.setState({
+                defaultRate: responseJson[0].Rate,
+            });
+        })
+        .catch((error)=>{
+            alert(error);
+        });
+    }
+
+
     componentDidMount(){
         const {navigation} = this.props;
         const userName = navigation.getParam('username', 'No User');
@@ -98,6 +158,7 @@ export default class PlaceOrderItem extends Component{
         .catch((error)=>{
             alert(error);
         });
+        this.RatingData();
     }
 
 
@@ -133,13 +194,20 @@ export default class PlaceOrderItem extends Component{
                     </View>
                     <View style={{alignItems: 'center',  marginLeft: 60}}>
                     <Text style={{marginTop: 10, fontWeight: 'bold', fontSize: 20, textAlign: 'center'}}>{name}</Text>
-                    <View style={{marginTop: 5, flexDirection: 'row'}}>
+                    <View style={{marginTop: 3, flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/location.png')} style={{height: 15, width: 15}}></Image></View>
                         <Text style={{marginLeft: 5, fontWeight: 'bold'}}>{city}</Text>
                     </View>
-                    <View style={{marginTop: 5, flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row'}}>
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/phone.png')} style={{height: 15, width: 15}}></Image></View>
                         <Text style={{marginLeft: 5, fontWeight: 'bold'}}>{phone}</Text>
+                    </View>
+                    <View style={styles.RateTouchableOpacityStyle}>
+                        {this.state.rate.map((num, index)=>(
+                            <TouchableOpacity key={num} onPress={() => this.Rating(num)}>
+                                <Image source={ num <= this.state.defaultRate ? require('../pictures/StarFilled.png') : require('../pictures/Star.png') } style={styles.RatingImageStyle}></Image>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                     </View>
                     </View>
@@ -272,5 +340,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(126,211,33,1)',
     borderRadius: 20,
+  },
+
+  RatingImageStyle:{
+      height: 20,
+      width: 20,
+  },
+
+  RateTouchableOpacityStyle:{
+      flexDirection: 'row',
   },
 });

@@ -26,6 +26,8 @@ export default class PlaceOrder extends Component {
             Category: '',
             SearchName: '',
             isModalVisible: false,
+            rate: [1, 2, 3, 4, 5],
+            defaultRate: 0,
         }
     }
 
@@ -165,6 +167,13 @@ export default class PlaceOrder extends Component {
                         <View style={{ alignSelf: 'center'}}><Image source={require('../pictures/phone.png')} style={{height: 15, width: 15}}></Image></View>
                         <Text style={{width: 200, marginLeft: 5}}>0{val.Phone}</Text>
                     </View>
+                    <View style={styles.RateTouchableOpacityStyle}>
+                        {this.state.rate.map((num, index)=>(
+                            <View key={num}>
+                                <Image source={ num <= val.Rating ? require('../pictures/StarFilled.png') : require('../pictures/Star.png') } style={styles.RatingImageStyle}></Image>
+                            </View>
+                        ))}
+                    </View>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -177,4 +186,14 @@ export default class PlaceOrder extends Component {
     }
 }
 
-const styles = StyleSheet.create();
+const styles = StyleSheet.create({
+  RatingImageStyle:{
+      height: 20,
+      width: 20,
+  },
+
+  RateTouchableOpacityStyle:{
+      flexDirection: 'row',
+      marginTop: 5,
+  },
+});
