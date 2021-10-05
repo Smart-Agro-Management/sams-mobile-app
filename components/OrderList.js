@@ -92,7 +92,8 @@ export default class OrderList extends Component{
                         <Text style={styles.userInfoText1}>{this.state.Name}</Text>
                         <Text style={styles.userInfoText2}>{this.state.City}</Text>
                         <View style={styles.straightline}>
-                        {this.state.dataset.map((val, index)=>(
+                        {this.state.dataset.map((val, index)=>{
+                        if(val.ID != ''){return(
                         <View style={styles.orderListStyle} key={index}>
                             <View>
                                 <Text style={styles.orderTextStyle1}>{val.City}</Text>
@@ -104,7 +105,10 @@ export default class OrderList extends Component{
                                 <Text style={styles.orderTextStyle3}>{val.Status}</Text>
                             </View>
                         </View>
-                        ))}
+                        )}else{
+                            return(<Text key={index} style={styles.OrderListTextStyle}>No farmer to show</Text>)
+                        }
+                        })}
                         </View>
                     </View>
                 </View>
@@ -171,4 +175,10 @@ const styles = StyleSheet.create({
     orderListInnerStyle:{
         width: 120,
     },
+
+  OrderListTextStyle:{
+      textAlign: 'center',
+      fontSize: 14,
+      fontWeight: 'bold',
+  },
 });

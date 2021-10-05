@@ -149,7 +149,8 @@ export default class FarmerListStock extends Component {
                 </View>
             </View>
             <View>
-            {this.state.dataset.map((val, index)=>(
+            {this.state.dataset.map((val, index)=>{
+                if(val.Name != ''){return(
                 <View key= {index}>
             <View style={{backgroundColor: '#fff', borderRadius: 10, margin: 10,
     shadowColor: "rgba(0,0,0,1)",
@@ -178,7 +179,10 @@ export default class FarmerListStock extends Component {
                 </TouchableOpacity>
             </View>
             </View>
-            ))}
+            )}else{
+                return(<Text key={index} style={styles.SearchNoResultTextStyle}>No farmer to show</Text>);
+            }
+            })}
             </View>
             </View>
             </ScrollView>
@@ -209,5 +213,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#fff',
+    },
+
+    SearchNoResultTextStyle:{
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 });

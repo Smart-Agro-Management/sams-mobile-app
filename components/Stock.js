@@ -1,3 +1,4 @@
+import { response } from 'express';
 import React, {Component} from 'react';
 import {
   View,
@@ -10,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -50,7 +52,8 @@ export default class Stock extends Component{
         })
         .then(response=>response.json())
         .then(responseJson=>{
-            alert(responseJson);
+            ToastAndroid.show(responseJson, ToastAndroid.SHORT);
+            this.StockData();
         })
         .catch((error)=>{
             alert(error);
@@ -73,7 +76,8 @@ export default class Stock extends Component{
         })
         .then(response=>response.json())
         .then(responseJson=>{
-            alert(responseJson);
+            ToastAndroid.show(responseJson, ToastAndroid.SHORT);
+            this.StockData();
         })
         .catch((error)=>{
             alert(error);
@@ -98,7 +102,8 @@ export default class Stock extends Component{
         })
         .then(response=>response.json())
         .then(responseJson=>{
-            alert(responseJson);
+            ToastAndroid.show(responseJson, ToastAndroid.SHORT);
+            this.StockData();
         })
         .catch((error)=>{
             alert(error);
@@ -108,8 +113,8 @@ export default class Stock extends Component{
         }
     }
 
-    componentDidMount(){
 
+    StockData = () =>{
         const {navigation} = this.props;
         const UserName = navigation.getParam('username', 'No User');
         const UserCategory = navigation.getParam('category', 'No Category');
@@ -137,6 +142,10 @@ export default class Stock extends Component{
         })
     }
 
+    componentDidMount(){
+        this.StockData();
+    }
+
     render(){
         return(
             <KeyboardAvoidingView style={styles.viewStyle}>
@@ -156,7 +165,8 @@ export default class Stock extends Component{
                     <View style={styles.straightline}></View>
                     <View>
                         <Text style={styles.productListTextStyle1}>Product List</Text>
-                        <View>{this.state.dataset.map((val, index)=>(
+                        <View>{this.state.dataset.map((val, index)=>{
+                        if(val.Name != ''){return(
                         <View style={styles.productListViewStyle1} key={index}>
                             <View>
                                 <Text>{val.Name} - {val.Price}৳ / {val.Unit}</Text>
@@ -170,12 +180,16 @@ export default class Stock extends Component{
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        ))}
+                        )}else{
+                            return(<Text key={index} style={styles.EmptyProductListStyle}>No Product in stock</Text>)
+                        }
+                        })}
                         </View>
                     </View>
                     <View>
                         <Text style={styles.productListTextStyle1}>In Stock</Text>
-                        <View>{this.state.dataset.map((val, index)=>(
+                        <View>{this.state.dataset.map((val, index)=>{
+                        if(val.Name != ''){return(
                         <View style={styles.productListViewStyle1} key={index}>
                             <View>
                                 <Text>{val.Name} - {val.Quantity}{val.Unit}</Text>
@@ -192,7 +206,10 @@ export default class Stock extends Component{
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        ))}
+                        )}else{
+                            return(<Text key={index} style={styles.EmptyProductListStyle}>No Product in stock</Text>)
+                        }
+                        })}
                         </View>
                     </View>
                 </View>
@@ -329,4 +346,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 5,
     },
+
+  EmptyProductListStyle:{
+      textAlign: 'center',
+      fontSize: 14,
+      fontWeight: 'bold',
+  },
 });

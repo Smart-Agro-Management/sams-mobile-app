@@ -78,6 +78,7 @@ export default class PlaceOrder extends Component {
             this.setState({
                 isloading: false,
                 dataset: responseJson,
+                SearchName: '',
             });
         })
         .catch((error)=>{
@@ -134,7 +135,7 @@ export default class PlaceOrder extends Component {
             }}>
                 <View style={{flexDirection: 'row'}}>
                     <View style={{flexDirection: 'row'}}>
-                        <TextInput placeholder="Type farmer's name" style={{backgroundColor: 'rgba(240,240,240,1)', margin: 5, borderRadius: 10, width: 260}} onChangeText={(SearchName)=>this.setState({SearchName})}></TextInput>
+                        <TextInput placeholder="Type farmer's name" style={{backgroundColor: 'rgba(240,240,240,1)', margin: 5, borderRadius: 10, width: 260}} onChangeText={(SearchName)=>this.setState({SearchName})} defaultValue={this.state.SearchName}></TextInput>
                     </View>
                     <TouchableOpacity style={{height: 36, width: 65, backgroundColor: "rgba(126,211,33,1)", justifyContent: 'center', alignSelf: 'center', borderRadius: 10}} onPress={this.Search}>
                         <Text style={{textAlign: 'center', fontWeight: 'bold', color: '#fff'}}>Serach</Text>
@@ -142,7 +143,8 @@ export default class PlaceOrder extends Component {
                 </View>
             </View>
             <View>
-            {this.state.dataset.map((val, index)=>(
+            {this.state.dataset.map((val, index)=>{
+                if(val.Name != ''){return(
                 <View key= {index}>
             <View style={{backgroundColor: '#fff', borderRadius: 10, margin: 10,
     shadowColor: "rgba(0,0,0,1)",
@@ -178,7 +180,9 @@ export default class PlaceOrder extends Component {
                 </TouchableOpacity>
             </View>
             </View>
-            ))}
+            )}else{
+                return(<Text key={index} style={styles.SearchNoResultTextStyle}>No farmer to show</Text>);
+            }})}
             </View>
             </View>
             </ScrollView>
@@ -195,5 +199,11 @@ const styles = StyleSheet.create({
   RateTouchableOpacityStyle:{
       flexDirection: 'row',
       marginTop: 5,
+  },
+
+  SearchNoResultTextStyle:{
+      textAlign: 'center',
+      fontSize: 14,
+      fontWeight: 'bold',
   },
 });

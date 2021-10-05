@@ -65,7 +65,7 @@ export default class PlaceOrderItem extends Component{
             })
             .then(response=>response.json())
             .then(response=>{
-                alert(response);
+                ToastAndroid.show(response, ToastAndroid.SHORT);
                 this.setState({isModalVisible: false});
             })
             .catch((error)=>{
@@ -214,7 +214,8 @@ export default class PlaceOrderItem extends Component{
                     </ImageBackground>
 
                     <View>
-                        {this.state.dataset.map((val, index) => (
+                        {this.state.dataset.map((val, index) => {
+                            if(val.Name != ''){return(
                             <View key={index}>
                             <View style={{borderColor: 'rgba(155,155,155,1)', width: 340, borderWidth: 1, margin: 10, alignSelf: 'center', borderRadius: 10, flexDirection: 'row'}}>
                             <View style={{margin: 5, width: 258}}>
@@ -226,7 +227,10 @@ export default class PlaceOrderItem extends Component{
                             </TouchableOpacity>
                             </View>
                             </View>
-                        ))}
+                            )}else{
+                                return(<Text key={index} style={styles.ProductListTextStyle}>This farmer still haven't added any product</Text>);
+                            }
+                        })}
                     </View>
 
                     
@@ -349,5 +353,11 @@ const styles = StyleSheet.create({
 
   RateTouchableOpacityStyle:{
       flexDirection: 'row',
+  },
+
+  ProductListTextStyle:{
+      textAlign: 'center',
+      fontSize: 14,
+      fontWeight: 'bold',
   },
 });

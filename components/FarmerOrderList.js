@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   TouchableWithoutFeedback,
+  ToastAndroid,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -102,7 +103,9 @@ export default class FarmerOrderList extends Component{
         })
         .then(response=>response.json())
         .then(responseJson=>{
-            alert(responseJson);
+            ToastAndroid.show(responseJson, ToastAndroid.SHORT);
+            this.OrderListData();
+            this.CustomerData();
         })
         .catch((error)=>{
             alert(error);
@@ -120,7 +123,8 @@ export default class FarmerOrderList extends Component{
                         <Text style={styles.userInfoText1}>{this.state.Name}</Text>
                         <Text style={styles.userInfoText2}>{this.state.City}</Text>
                         <View style={styles.straightline}>
-                        {this.state.dataset.map((val, index)=>(
+                        {this.state.dataset.map((val, index)=>{
+                        if(val.ID != ''){return(
                         <View style={styles.orderListStyle} key={index}>
                             <View>
                                 <Text style={styles.orderTextStyle1}>{val.City}</Text>
@@ -135,7 +139,10 @@ export default class FarmerOrderList extends Component{
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        ))}
+                        )}else{
+                            return(<Text key={index} style={styles.OrderListTextStyle}>No orders</Text>);
+                        }
+                        })}
                         </View>
                     </View>
                 </View>
@@ -266,4 +273,10 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginBottom: 5,
     },
+
+  OrderListTextStyle:{
+      textAlign: 'center',
+      fontSize: 14,
+      fontWeight: 'bold',
+  },
 });
