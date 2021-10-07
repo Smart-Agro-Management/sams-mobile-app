@@ -146,6 +146,10 @@ export default class Stock extends Component{
         this.StockData();
     }
 
+    componentDidUpdate(){
+        this.StockData();
+    }
+
     render(){
         return(
             <KeyboardAvoidingView style={styles.viewStyle}>

@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   TextInput,
   KeyboardAvoidingView,
+  ToastAndroid,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import SelectDropdown from 'react-native-select-dropdown';
@@ -96,7 +97,7 @@ export default class UpdateItem extends Component{
       })
         .then(response => response.json())
         .then(responseJson => {
-          alert(responseJson);
+          ToastAndroid.show(responseJson, ToastAndroid.SHORT);
         })
         .catch(Error => {
           alert(Error);
@@ -124,7 +125,7 @@ export default class UpdateItem extends Component{
                                 </View>
                             </View>
                             <View>
-                                <Text style={styles.textInputHeaderStyle1}>Price / kg:</Text>
+                                <Text style={styles.textInputHeaderStyle1}>Price / Unit:</Text>
                                 <View style={styles.textInputViewStyle2}>
                                     <TextInput style={styles.textInputStyle2} onChangeText={(Price) => this.setState({Price})} value={this.state.Price}></TextInput>
                                 </View>

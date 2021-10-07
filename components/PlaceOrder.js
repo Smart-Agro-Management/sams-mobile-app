@@ -87,7 +87,8 @@ export default class PlaceOrder extends Component {
         }
     }
 
-    componentDidMount(){
+
+    FarmerList = () =>{
         const {navigation} = this.props;
         const userName = navigation.getParam('username', 'No User');
 
@@ -112,6 +113,15 @@ export default class PlaceOrder extends Component {
         .catch((error)=>{
             alert(error);
         })
+    }
+
+    componentDidMount(){
+        this.FarmerList();
+    }
+
+
+    componentDidUpdate(){
+        this.FarmerList();
     }
 
     render(){
